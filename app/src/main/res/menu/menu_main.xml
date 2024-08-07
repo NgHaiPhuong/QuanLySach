@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Thêm tác giả"
+        android:id="@+id/them"/>
+    <item android:title="Xem danh sách tác giả"
+        android:id="@+id/xem"/>
+    <item android:title="Quản lý sách"
+        android:id="@+id/ql"/>
+</menu>

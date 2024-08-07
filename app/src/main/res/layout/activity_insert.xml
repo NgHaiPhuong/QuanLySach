@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".InsertActivity">
+
+    <TableLayout
+        android:id="@+id/table"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TableRow>
+
+            <TextView
+                android:layout_span="1"
+                android:text="Mã tác giả"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/etMa"
+                android:layout_span="2"
+                android:hint="Nhập mã tác giả"
+                android:textSize="16sp" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:layout_span="1"
+                android:text="Tên tác giả"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/etTen"
+                android:layout_span="2"
+                android:hint="Nhập tên tác giả"
+                android:textSize="16sp" />
+        </TableRow>
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/btnXoaTrang"
+                android:layout_span="1"
+                android:text="Xóa trắng"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btnLuuAndUpdate"
+                android:layout_span="1"
+                android:text="Lưu tác giả"
+                android:textSize="16sp" />
+        </TableRow>
+    </TableLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
