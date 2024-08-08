@@ -35,7 +35,11 @@ public class InsertActivity extends AppCompatActivity {
     private void handleEvent() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
+            String ma = bundle.getString("fix_ma");
+            String ten = bundle.getString("fix_ten");
 
+            etMa.setText(ma.toString());
+            etTen.setText(ten.toString());
         } else {
             btnThemOrUpdate.setOnClickListener(v -> {
                 String ma = etMa.getText().toString();
@@ -64,7 +68,6 @@ public class InsertActivity extends AppCompatActivity {
             Log.d("nghp", book.toString());
             writer.newLine();
             writer.write(book.toString());
-            writer.newLine();
             writer.close();
         }catch (IOException e){
             Log.e("nghp", e.toString());

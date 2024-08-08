@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -39,7 +40,6 @@ public class ManagerActivity extends AppCompatActivity {
 //        dsBook.add(new Book("B3", "Novel"));
 
         getWidget();
-        readFile();
 //        Bundle bundle = getIntent().getExtras();
 //        if (bundle != null) {
 //            Log.d("nghp", bundle.getString("ma"));
@@ -48,6 +48,7 @@ public class ManagerActivity extends AppCompatActivity {
 //            adapter.notifyDataSetChanged();
 //        }
         handleEvent();
+        readFile();
     }
 
     private void readFile() {
@@ -55,12 +56,11 @@ public class ManagerActivity extends AppCompatActivity {
             dsBook.clear();
             FileInputStream in = openFileInput("qlbook.txt");
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            String line = "";
-            while ((line = reader.readLine()) != null){
+            String line;
+            while ((line = reader.readLine()) != null) {
                 dsBook.add(Book.fromString(line));
             }
             adapter.notifyDataSetChanged();
-            in.close();
             reader.close();
         } catch (FileNotFoundException e) {
             Log.e("nghp", e.toString());
@@ -73,6 +73,27 @@ public class ManagerActivity extends AppCompatActivity {
         btnBack.setOnClickListener(v -> {
             Intent intent = new Intent(ManagerActivity.this, MainActivity.class);
             startActivity(intent);
+        });
+
+        lstView.setOnItemClickListener((parent, view, position, id) -> {
+            bookSeleted = dsBook.get(position);
+
+            Intent intent = new Intent(ManagerActivity.this, InsertActivity.class);
+
+            Bundle bundle = new Bundle();
+            bundle.putString("fix_ma", bookSeleted.getMaTg());
+            bundle.putString("fix_ten", bookSeleted.getTenTg());
+            intent.putExtras(bundle);
+
+            startActivity(intent);
+        });
+
+        lstView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                return false;
+            }
         });
     }
 
