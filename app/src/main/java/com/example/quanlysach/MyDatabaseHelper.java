@@ -19,14 +19,14 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String TABLE_BOOK = "BOOK";
     private static final String ID_COLUMN = "id";
-    private static final String NAME_COLUMN = "name";
+    private static final String NAME_COLUMN = "NAME";
     private static final String CREATE_BOOK_TABLE_SQL =
             "CREATE TABLE IF NOT EXISTS " + TABLE_BOOK + " (" +
                     ID_COLUMN + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
                     NAME_COLUMN + " TEXT NOT NULL" + ")";
     private static MyDatabaseHelper sInstance;
 
-    public static MyDatabaseHelper getsInstance(Context context) {
+    public static MyDatabaseHelper getInstance(Context context) {
         if (sInstance == null)
             sInstance = new MyDatabaseHelper(context.getApplicationContext());
         return sInstance;
@@ -56,9 +56,10 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(ID_COLUMN, book.getMaTg());
         values.put(NAME_COLUMN, book.getTenTg());
-        long rowId = db.insert(TABLE_BOOK, null, values);
+        long rowID = db.insert(TABLE_BOOK, null, values);
         db.close();
-        if (rowId != -1) return false;
+        if (rowID != -1)
+            return false;
         return true;
     }
 
@@ -66,8 +67,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         Book book = null;
         Cursor cursor = db.query(TABLE_BOOK, new String[]{ID_COLUMN, NAME_COLUMN},
-                ID_COLUMN + " =?",
-                new String[]{id}, null, null, null);
+                ID_COLUMN + "= ?",
+                new String[]{String.valueOf(id)}, null, null, null);
         if (cursor != null && cursor.moveToFirst()) {
             book = new Book(cursor.getString(0), cursor.getString(1));
             cursor.close();
@@ -76,25 +77,25 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return book;
     }
 
-    @SuppressLint("Recycle")
-    public List<Book> getBook() {
+    @SuppressLint("Range")
+    public List<Book> getAllBook(){
         SQLiteDatabase db = getReadableDatabase();
         List<Book> books = new ArrayList<>();
         String sql = "SELECT * FROM " + TABLE_BOOK;
         Cursor cursor = db.rawQuery(sql, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                books.add(new Book(cursor.getString(0),
-                        cursor.getString(1)));
-            } while (cursor.moveToNext());
+        if(cursor != null && cursor.moveToFirst()){
+            do{
+                books.add(new
+                        Book(cursor.getString(cursor.getColumnIndex(ID_COLUMN)),
+                        cursor.getString(cursor.getColumnIndex(NAME_COLUMN))));
+            }while (cursor.moveToNext());
             cursor.close();
         }
         db.close();
         return books;
     }
 
-    @SuppressLint("Recycle")
-    public int getTotalBooks() {
+    public int getTotalBook(){
         SQLiteDatabase db = getReadableDatabase();
         String sql = "SELECT * FROM " + TABLE_BOOK;
         Cursor cursor = db.rawQuery(sql, null);
@@ -104,28 +105,31 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return total;
     }
 
-    public void updateBook(Book book) {
+    public int updateBook(Book book){
         SQLiteDatabase db = getReadableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(ID_COLUMN, book.getMaTg());
-        values.put(NAME_COLUMN, book.getTenTg());
+        ContentValues value = new ContentValues();
+        value.put(ID_COLUMN, book.getMaTg());
+        value.put(NAME_COLUMN, book.getTenTg());
 
-        db.update(TABLE_BOOK, values, ID_COLUMN + " = ?",
-                new String[]{book.getMaTg()});
+        int rowEffect = db.update(TABLE_BOOK, value, ID_COLUMN + " = ?",
+                new String[]{String.valueOf(book.getMaTg())});
         db.close();
+        return rowEffect;  // trả về số lượng hàng đã được cập nhật
     }
 
-    public void deleteAllBook() {
+    public int deleteAllBook(){
         SQLiteDatabase db = getReadableDatabase();
-        db.delete(TABLE_BOOK, null, null);
+        int rowEffect = db.delete(TABLE_BOOK, null, null);
         db.close();
+        return rowEffect;
     }
 
-    public void deleteBook(Book book){
+    public int deleteBook(Book book) {
         SQLiteDatabase db = getReadableDatabase();
-        db.delete(TABLE_BOOK, ID_COLUMN + " = ?",
-                new String[]{book.getMaTg()});
+        int rowEffect = db.delete(TABLE_BOOK, ID_COLUMN + " = ?", new
+                String[]{String.valueOf(book.getMaTg())});
         db.close();
+        return rowEffect;
     }
 }
 

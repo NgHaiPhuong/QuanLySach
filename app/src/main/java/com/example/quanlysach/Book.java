@@ -36,7 +36,12 @@ public class Book implements Serializable {
     @NonNull
     @Override
     public String toString() {
-        return getMaTg() + " - " + getTenTg();
+        return getMaTg() + " , " + getTenTg();
+    }
+
+    public static Book fromString(String str){
+        String[] part = str.split(" , ");
+        return new Book(part[0], part[1]);
     }
 }
 
